@@ -27,29 +27,29 @@ class UserSeesAllTasksTest < FeatureTest
 		click_button("submit")
 		
 		assert_equal "/tasks", current_path
-		save_and_open_page
 		within(".container") do
 			assert page.has_content?("pizza")
 		end
 	end
 
 	def test_user_can_edit_a_task_form
-		visit("/tasks/new")
+		# visit("/tasks/new")
 
-		fill_in("task[title]", with: "pizza")
-		fill_in("task[description]", with: "pepperoni")
-		click_button("submit")
-
+		# fill_in("task[title]", with: "pizza")
+		# fill_in("task[description]", with: "pepperoni")
+		# click_button("submit")
+		task = TaskManager.create({title: "update",
+												description: "update"})
+		visit("/tasks")
 		assert_equal "/tasks", current_path
 		click_link("edit")
-		assert_equal "/tasks/1/edit", current_path
+		assert_equal "/tasks/#{task.id}/edit", current_path
 
 		fill_in("task[title]", with: "bread")
 		fill_in("task[description]", with: "wheat")
 		click_button("Update Task")
 
-		assert_equal "/tasks/1", current_path
-		save_and_open_page
+		assert_equal "/tasks/#{task.id}", current_path
 		within(".container") do
 			assert page.has_content?("bread")
 		end
